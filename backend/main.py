@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse
 import os
 from typing import List
 import datetime
+from zoneinfo import ZoneInfo
 import logging
 from google_drive import drive_manager
 
@@ -27,7 +28,7 @@ ALLOWED_EXTENSIONS = {'.mp4', '.mov', '.avi', '.mkv'}
 @app.post("/api/upload")
 async def upload_files(files: List[UploadFile] = File(...)):
     uploaded_count = 0
-    folder_name = datetime.datetime.now().strftime("%Y-%m-%d")
+    folder_name = datetime.datetime.now(ZoneInfo("Asia/Bangkok")).strftime("%Y-%m-%d")
     
     for file in files:
         # Check extension

@@ -1,5 +1,6 @@
 import os
 import datetime
+from zoneinfo import ZoneInfo
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
@@ -68,7 +69,7 @@ class GoogleDriveManager:
         """
         Check if a file with `file_name` already exists in today's folder.
         """
-        today = datetime.datetime.now().strftime("%Y-%m-%d")
+        today = datetime.datetime.now(ZoneInfo("Asia/Bangkok")).strftime("%Y-%m-%d")
         # Ensure folder exists and get its ID
         folder_id = self._get_or_create_folder(today)
         
@@ -82,7 +83,7 @@ class GoogleDriveManager:
         """
         Uploads a file to a folder named by the current date (YYYY-MM-DD).
         """
-        today = datetime.datetime.now().strftime("%Y-%m-%d")
+        today = datetime.datetime.now(ZoneInfo("Asia/Bangkok")).strftime("%Y-%m-%d")
         folder_id = self._get_or_create_folder(today)
 
         file_metadata = {
