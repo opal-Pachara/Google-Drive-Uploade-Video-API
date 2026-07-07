@@ -1,5 +1,8 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 from typing import List
 import datetime
 import logging
@@ -77,3 +80,19 @@ def get_quota():
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
+
+# Mount the static directory if it exists (for Monolith deployment)
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_dir):
+    app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
+
+@app.exception_handler(404)
+async def custom_404_handler(request: Request, exc):
+    # If the route is an API call, return standard JSON 404
+    if request.url.path.startswith("/api/"):
+        return {"detail": "Not Found"}
+    
+    # Otherwise, fallback to serving index.html for React Router SPA
+    if os.path.exists(os.path.join(static_dir, "index.html")):
+        return FileResponse(os.path.join(static_dir, "index.html"))
+    return {"detail": "Not Found"}
