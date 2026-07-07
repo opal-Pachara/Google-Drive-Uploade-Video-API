@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: upload_backend
+    volumes:
+      - ./backend/credentials:/app/credentials
+    environment:
+      - PARENT_FOLDER_ID=${PARENT_FOLDER_ID:-}
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: upload_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

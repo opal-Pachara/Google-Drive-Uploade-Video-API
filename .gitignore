@@ -1,0 +1,25 @@
+# Environments
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+
+# Node
+node_modules/
+dist/
+build/
+
+# IDEs
+.vscode/
+.idea/
+
+# Credentials
+backend/credentials/*.json
+backend/credentials/token.json
+backend/credentials/credentials.json
+backend/credentials/service_account.json
